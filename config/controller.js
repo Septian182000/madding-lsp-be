@@ -31,9 +31,9 @@ exports.getArticle = async (req, res) => {
   try {
     const search = req.query.search;
 
-    let query = "";
+    let query = `SELECT * FROM article `;
 
-    if (!search) {
+    if (search) {
       query = `SELECT * FROM article WHERE title LIKE '%${search}%'`;
     } else {
       query = `SELECT * FROM article `;
@@ -45,5 +45,68 @@ exports.getArticle = async (req, res) => {
     response.ok(queryResult, res);
   } catch (error) {
     console.log("error");
+  }
+};
+
+exports.showArticleById = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `select * from article where id=${id}`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok(queryResult, res);
+  } catch (error) {
+    console.log("error");
+  }
+};
+
+exports.createArticle = async (req, res) => {
+  try {
+    const idAdmin = req.body.admin_id;
+    const title = req.body.title;
+    const content = req.body.content;
+    const imgUrl = req.body.image_url;
+
+    const query = `insert into article (admin_id, title, content, image_url) values('${idAdmin}', '${title}', '${content}', '${imgUrl}')`;
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success create article", res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.updateArticle = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const title = req.body.title;
+    const content = req.body.content;
+    const image_url = req.body.image_url;
+
+    const query = `UPDATE article SET title = '${title}', content = '${content}', image_url = '${image_url}' WHERE id = ${id}`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success update article", res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.deleteArticle = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `delete from article where id=${id}`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success delete article", res);
+  } catch (error) {
+    console.error(error);
   }
 };

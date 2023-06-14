@@ -5,7 +5,6 @@ exports.ok = (values, res) => {
     status_code: 200,
     data: values,
     status: "success",
-    // total: length,
   };
 
   res.json(data);
