@@ -110,3 +110,50 @@ exports.deleteArticle = async (req, res) => {
     console.error(error);
   }
 };
+
+// comments
+exports.showComments = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `select * from comments where article_id=${id} ORDER BY created_at DESC`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok(queryResult, res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.storeComments = async (req, res) => {
+  try {
+    const article_id = req.body.article_id;
+    const name = req.body.name;
+    const email = req.body.email;
+    const comment = req.body.comment;
+
+    const query = `insert into comments (article_id, name, email, comment) values('${article_id}', '${name}', '${email}', '${comment}')`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success create comment", res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.deleteComment = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const query = `delete from comments where id=${id}`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success delete comment", res);
+  } catch (error) {
+    console.error(error);
+  }
+};
