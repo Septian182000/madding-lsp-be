@@ -7,6 +7,8 @@ module.exports = (app) => {
 
   app.post("/login", json.login);
 
+  app.post("/register", json.register);
+
   app.get("/article", json.getArticle);
 
   app.get("/detail-article/:id", json.showArticleById);

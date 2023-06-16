@@ -27,6 +27,24 @@ exports.login = (req, res) => {
   });
 };
 
+exports.register = async (req, res) => {
+  try {
+    const name = req.body.name;
+    const username = req.body.username;
+    const password = req.body.password;
+    const role = "admin";
+
+    const query = `insert into admin (name, username, password, role) values('${name}', '${username}', '${password}', '${role}')`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success register", res);
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 exports.getArticle = async (req, res) => {
   try {
     const search = req.query.search;
