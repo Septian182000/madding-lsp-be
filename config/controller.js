@@ -86,8 +86,9 @@ exports.createArticle = async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const imgUrl = req.body.image_url;
+    const hideComment = req.body.hide_comment;
 
-    const query = `insert into article (admin_id, title, content, image_url) values('${idAdmin}', '${title}', '${content}', '${imgUrl}')`;
+    const query = `insert into article (admin_id, title, content, image_url, hide_comment) values('${idAdmin}', '${title}', '${content}', '${imgUrl}', '${hideComment}')`;
     const queryAsync = util.promisify(connection.query).bind(connection);
     const queryResult = await queryAsync(query);
 
@@ -103,8 +104,9 @@ exports.updateArticle = async (req, res) => {
     const title = req.body.title;
     const content = req.body.content;
     const image_url = req.body.image_url;
+    const hideComment = req.body.hide_comment;
 
-    const query = `UPDATE article SET title = '${title}', content = '${content}', image_url = '${image_url}' WHERE id = ${id}`;
+    const query = `UPDATE article SET title = '${title}', content = '${content}', image_url = '${image_url}',  hide_comment= '${hideComment}' WHERE id = ${id}`;
 
     const queryAsync = util.promisify(connection.query).bind(connection);
     const queryResult = await queryAsync(query);
@@ -157,6 +159,22 @@ exports.storeComments = async (req, res) => {
     const queryResult = await queryAsync(query);
 
     response.ok("Success create comment", res);
+  } catch (error) {
+    console.error(error);
+  }
+};
+
+exports.editComment = async (req, res) => {
+  try {
+    const id = req.params.id;
+    const hideComment = req.body.hide_comment
+
+    const query = `update comments set hide_comment = '${hideComment}' where id=${id}`;
+
+    const queryAsync = util.promisify(connection.query).bind(connection);
+    const queryResult = await queryAsync(query);
+
+    response.ok("Success update comment", res);
   } catch (error) {
     console.error(error);
   }

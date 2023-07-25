@@ -24,5 +24,7 @@ module.exports = (app) => {
 
   app.post("/comments/create", json.storeComments);
 
+  app.put("/comments/update/:id", json.editComment);
+
   app.delete("/comments/delete/:id", json.deleteComment);
 };
